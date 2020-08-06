@@ -50,14 +50,17 @@ for movie in movie_data:
     URL = f'https://movie.naver.com/movie/bi/mi/pointWriteFormList.nhn?code={code}'
     re_response = requests.get(URL, headers=headers, params=params)
     re_soup = BeautifulSoup(re_response.text, 'html.parser')
+
     ul = re_soup.select('div[class=score_result] > ul > li')
+
     idx = 0
     for i, li in enumerate(ul):
-        score = li.select_one('div[class=star_score] > em').getText()
+        score = li.select_one('div[class=star_score] > em').getText()  # 평점
+        # 리뷰의 길이가 짧은 경우
         if li.select_one(f'div.score_reple > p > span[id=_filtered_ment_{i}] > span#_unfold_ment{i}') is None:
             review = li.select_one(
                 f'div.score_reple > p > span[id=_filtered_ment_{i}]')
-        else:
+        else:  # 리뷰의 길이가 길어서 페이지를 이동해야하는 경우
             review = li.select_one(
                 f'div.score_reple > p > span[id=_filtered_ment_{i}]').getText().strip()
 
