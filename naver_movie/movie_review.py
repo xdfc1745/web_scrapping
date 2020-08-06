@@ -54,8 +54,12 @@ for movie in movie_data:
     idx = 0
     for i, li in enumerate(ul):
         score = li.select_one('div[class=star_score] > em').getText()
-        review = li.select_one(
-            f'div.score_reple > p > span[id=_filtered_ment_{i}]').getText().strip()
+        if li.select_one(f'div.score_reple > p > span[id=_filtered_ment_{i}] > span#_unfold_ment{i}') is None:
+            review = li.select_one(
+                f'div.score_reple > p > span[id=_filtered_ment_{i}]')
+        else:
+            review = li.select_one(
+                f'div.score_reple > p > span[id=_filtered_ment_{i}]').getText().strip()
+
         print(score, " ", review, " ", )
         idx += 1
-    break
